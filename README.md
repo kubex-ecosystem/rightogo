@@ -28,14 +28,21 @@ RighToGo é uma extensão para VSCode criada para reduzir a fricção de executa
 ## Comandos
 
 - `RighToGo: Run Current Go Script`
+- `RighToGo: Run Current Go Script (With Args)`
+- `RighToGo: Run Current Go Script (New Window)`
 - `RighToGo: Ask LLM About This Script` (stub local, sem rede)
 
 ## Configurações
 
 - `rightogo.goBinaryPath`: caminho do binário Go.
-  - default: `/home/user/.go/bin/go`
+  - default: `${userHome}/.go/bin/go`
+  - suporte a `${userHome}`, `${env:VAR}`, `${workspaceFolder}`, `~`
 - `rightogo.cleanupTemporaryDirectory`: remove pasta temporária após execução.
   - default: `true`
+- `rightogo.promptForArgumentsOnRun`: abre input de argumentos no comando padrão.
+  - default: `false`
+- `rightogo.runInNewWindowTerminalByDefault`: tenta mover terminal para nova janela.
+  - default: `false`
 
 ## Build, Teste e Execução Local
 

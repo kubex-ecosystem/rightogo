@@ -5,6 +5,7 @@ import * as fsSync from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
 import { buildEphemeralCommandSequence } from './services/ephemeralRunner';
+import { parseProgramArguments } from './services/programArgs';
 import { isMainPackageScript } from './services/scriptEligibility';
 
 const EXTENSION_NAME = 'RighToGo';
@@ -12,16 +13,23 @@ const TERMINAL_NAME = 'RighToGo Terminal';
 const OUTPUT_NAME = 'RighToGo';
 const CONFIG_NAMESPACE = 'rightogo';
 const PROJECT_COMMAND_ID = 'rightogo.runScript';
+const RUN_WITH_ARGS_COMMAND_ID = 'rightogo.runScriptWithArgs';
+const RUN_IN_NEW_WINDOW_COMMAND_ID = 'rightogo.runScriptInNewWindow';
 const ASK_LLM_COMMAND_ID = 'rightogo.askLlmAboutScript';
 const RUN_CONTEXT_KEY = 'rightogo.canRunActiveGoFile';
+const MOVE_TERMINAL_NEW_WINDOW_COMMAND = 'workbench.action.terminal.moveIntoNewWindow';
+const TERMINAL_NEW_WINDOW_SETTING = 'runInNewWindowTerminalByDefault';
+const PROMPT_ARGS_SETTING = 'promptForArgumentsOnRun';
 
 type RunMode = 'project' | 'ephemeral';
+type TerminalMode = 'panel' | 'newWindow';
 
 interface RunPayload {
   mode: RunMode;
   sourceFilePath: string;
   goBinaryPath: string;
   cleanupTemp: boolean;
+  programArgs: string[];
 }
 
 interface ScriptArtifacts {
@@ -44,6 +52,12 @@ interface LlmPromptPayload {
   lastRunError?: string;
   sourceFilePath: string;
   capturedAtIso: string;
+}
+
+interface RunCommandOptions {
+  targetUri?: vscode.Uri;
+  promptForArgs?: boolean;
+  terminalMode?: TerminalMode;
 }
 
 class ExecutionState {
@@ -83,6 +97,8 @@ class LlmBridgeStub {
 let quickRunTerminal: vscode.Terminal | undefined;
 const executionState = new ExecutionState();
 const llmBridge = new LlmBridgeStub();
+let lastProgramArgsInput = '';
+let warnedMoveToNewWindowUnavailable = false;
 
 export function activate(context: vscode.ExtensionContext): void {
   const output = vscode.window.createOutputChannel(OUTPUT_NAME);
@@ -103,8 +119,28 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(PROJECT_COMMAND_ID, async () => {
-      await runScriptCommand(output);
+    vscode.commands.registerCommand(PROJECT_COMMAND_ID, async (uri?: vscode.Uri) => {
+      await runScriptCommand(output, {
+        targetUri: uri
+      });
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(RUN_WITH_ARGS_COMMAND_ID, async (uri?: vscode.Uri) => {
+      await runScriptCommand(output, {
+        targetUri: uri,
+        promptForArgs: true
+      });
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(RUN_IN_NEW_WINDOW_COMMAND_ID, async (uri?: vscode.Uri) => {
+      await runScriptCommand(output, {
+        targetUri: uri,
+        terminalMode: 'newWindow'
+      });
     })
   );
 
@@ -143,14 +179,16 @@ export function deactivate(): void {
   }
 }
 
-async function runScriptCommand(output: vscode.OutputChannel): Promise<void> {
-  const activeEditor = vscode.window.activeTextEditor;
-  if (!activeEditor) {
-    vscode.window.showErrorMessage(`${EXTENSION_NAME}: no active editor found.`);
+async function runScriptCommand(
+  output: vscode.OutputChannel,
+  options: RunCommandOptions = {}
+): Promise<void> {
+  const document = await resolveTargetDocument(options.targetUri);
+  if (!document) {
+    vscode.window.showErrorMessage(`${EXTENSION_NAME}: no active Go file found.`);
     return;
   }
 
-  const document = activeEditor.document;
   if (document.languageId !== 'go' || path.extname(document.fileName) !== '.go') {
     vscode.window.showErrorMessage(`${EXTENSION_NAME}: active file is not a Go source file.`);
     return;
@@ -178,6 +216,15 @@ async function runScriptCommand(output: vscode.OutputChannel): Promise<void> {
   const config = vscode.workspace.getConfiguration(CONFIG_NAMESPACE);
   const configuredBinary = (config.get<string>('goBinaryPath') ?? '').trim();
   const cleanupTemp = config.get<boolean>('cleanupTemporaryDirectory', true);
+  const promptForArgsByDefault = config.get<boolean>(PROMPT_ARGS_SETTING, false);
+  const runInNewWindowByDefault = config.get<boolean>(TERMINAL_NEW_WINDOW_SETTING, false);
+
+  const shouldPromptForArgs = options.promptForArgs ?? promptForArgsByDefault;
+  const terminalMode: TerminalMode = options.terminalMode ?? (runInNewWindowByDefault ? 'newWindow' : 'panel');
+  const programArgs = shouldPromptForArgs ? await promptForProgramArgs() : [];
+  if (!programArgs) {
+    return;
+  }
 
   const goBinaryPath = await resolveGoBinaryPath(configuredBinary, output);
   if (!goBinaryPath) {
@@ -192,11 +239,15 @@ async function runScriptCommand(output: vscode.OutputChannel): Promise<void> {
     mode: hasGoMod ? 'project' : 'ephemeral',
     sourceFilePath,
     goBinaryPath,
-    cleanupTemp
+    cleanupTemp,
+    programArgs
   };
 
   const terminal = getOrCreateTerminal();
   terminal.show(false);
+  if (terminalMode === 'newWindow') {
+    await tryMoveTerminalIntoNewWindow();
+  }
 
   try {
     const artifacts =
@@ -245,6 +296,41 @@ async function askLlmCommand(output: vscode.OutputChannel): Promise<void> {
   );
 }
 
+async function resolveTargetDocument(targetUri?: vscode.Uri): Promise<vscode.TextDocument | undefined> {
+  if (targetUri) {
+    try {
+      return await vscode.workspace.openTextDocument(targetUri);
+    } catch {
+      return undefined;
+    }
+  }
+
+  return vscode.window.activeTextEditor?.document;
+}
+
+async function promptForProgramArgs(): Promise<string[] | undefined> {
+  const userInput = await vscode.window.showInputBox({
+    title: 'RighToGo: Program Arguments',
+    prompt: 'Optional arguments passed to the Go script',
+    placeHolder: '--port 8080 --name \"John Doe\"',
+    value: lastProgramArgsInput,
+    ignoreFocusOut: true
+  });
+
+  if (userInput === undefined) {
+    return undefined;
+  }
+
+  const parsed = parseProgramArguments(userInput);
+  if (parsed.error) {
+    vscode.window.showErrorMessage(`${EXTENSION_NAME}: invalid arguments. ${parsed.error}`);
+    return undefined;
+  }
+
+  lastProgramArgsInput = userInput;
+  return parsed.args;
+}
+
 async function updateRunCommandContext(): Promise<void> {
   const isRunnable = isRunnableActiveEditor(vscode.window.activeTextEditor);
   await vscode.commands.executeCommand('setContext', RUN_CONTEXT_KEY, isRunnable);
@@ -269,6 +355,19 @@ function isRunnableActiveEditor(editor: vscode.TextEditor | undefined): boolean 
   }
 
   return isMainPackageScript(document.getText());
+}
+
+async function tryMoveTerminalIntoNewWindow(): Promise<void> {
+  try {
+    await vscode.commands.executeCommand(MOVE_TERMINAL_NEW_WINDOW_COMMAND);
+  } catch {
+    if (!warnedMoveToNewWindowUnavailable) {
+      warnedMoveToNewWindowUnavailable = true;
+      vscode.window.showWarningMessage(
+        `${EXTENSION_NAME}: move terminal to new window is not available in this VSCode build. Using panel terminal.`
+      );
+    }
+  }
 }
 
 async function verifyGoBinary(goBinaryPath: string, output: vscode.OutputChannel): Promise<boolean> {
@@ -370,6 +469,7 @@ async function prepareProjectRunScript(payload: RunPayload): Promise<ScriptArtif
 
   const sourceDir = path.dirname(payload.sourceFilePath);
   const sourceBaseName = path.basename(payload.sourceFilePath);
+  const programArgsSegment = payload.programArgs.map((arg) => toSingleQuotedShellArg(arg)).join(' ');
   const shellScript = `#!/usr/bin/env bash
 set -u
 GO_BIN=${toSingleQuotedShellArg(payload.goBinaryPath)}
@@ -380,7 +480,7 @@ STATUS_FILE=${toSingleQuotedShellArg(statusFilePath)}
 
 run_core() {
   cd "$WORK_DIR" || return 1
-  "$GO_BIN" run "$TARGET_FILE"
+  "$GO_BIN" run "$TARGET_FILE"${programArgsSegment ? ` ${programArgsSegment}` : ''}
 }
 
 run_core 2>&1 | tee "$LOG_FILE"
@@ -404,7 +504,12 @@ async function prepareEphemeralRunScript(payload: RunPayload): Promise<ScriptArt
   const copiedTargetFile = path.join(tempRunDir, sourceBaseName);
   await fs.copyFile(payload.sourceFilePath, copiedTargetFile);
 
-  const commandSequence = buildEphemeralCommandSequence(payload.goBinaryPath, sourceBaseName);
+  const commandSequence = buildEphemeralCommandSequence(
+    payload.goBinaryPath,
+    sourceBaseName,
+    'rightogo_temp_run',
+    payload.programArgs
+  );
   const commandLines = commandSequence
     .map((step) => `"${step.command}" ${step.args.map((arg) => toSingleQuotedShellArg(arg)).join(' ')} || return $?`)
     .join('\n  ');
@@ -546,6 +651,7 @@ function truncateForPreview(value: string, maxLength: number): string {
 function toSingleQuotedShellArg(value: string): string {
   return `'${value.replace(/'/g, `'\\''`)}'`;
 }
+
 
 async function fileExists(filePath: string): Promise<boolean> {
   try {

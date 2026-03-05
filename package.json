@@ -13,6 +13,8 @@
   "activationEvents": [
     "onLanguage:go",
     "onCommand:rightogo.runScript",
+    "onCommand:rightogo.runScriptWithArgs",
+    "onCommand:rightogo.runScriptInNewWindow",
     "onCommand:rightogo.askLlmAboutScript"
   ],
   "homepage": "https://github.com/kubex-ecosystem/rightogo#readme",
@@ -66,6 +68,16 @@
         "command": "rightogo.askLlmAboutScript",
         "title": "RighToGo: Ask LLM About This Script",
         "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "rightogo.runScriptWithArgs",
+        "title": "RighToGo: Run Current Go Script (With Args)",
+        "icon": "$(symbol-parameter)"
+      },
+      {
+        "command": "rightogo.runScriptInNewWindow",
+        "title": "RighToGo: Run Current Go Script (New Window)",
+        "icon": "$(multiple-windows)"
       }
     ],
     "menus": {
@@ -76,9 +88,51 @@
           "when": "rightogo.canRunActiveGoFile"
         }
       ],
+      "editor/context": [
+        {
+          "command": "rightogo.runScript",
+          "group": "navigation@50",
+          "when": "rightogo.canRunActiveGoFile"
+        },
+        {
+          "command": "rightogo.runScriptWithArgs",
+          "group": "navigation@51",
+          "when": "rightogo.canRunActiveGoFile"
+        },
+        {
+          "command": "rightogo.runScriptInNewWindow",
+          "group": "navigation@52",
+          "when": "rightogo.canRunActiveGoFile"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "rightogo.runScript",
+          "group": "navigation@50",
+          "when": "resourceExtname == .go"
+        },
+        {
+          "command": "rightogo.runScriptWithArgs",
+          "group": "navigation@51",
+          "when": "resourceExtname == .go"
+        },
+        {
+          "command": "rightogo.runScriptInNewWindow",
+          "group": "navigation@52",
+          "when": "resourceExtname == .go"
+        }
+      ],
       "commandPalette": [
         {
           "command": "rightogo.runScript",
+          "when": "resourceLangId == go"
+        },
+        {
+          "command": "rightogo.runScriptWithArgs",
+          "when": "resourceLangId == go"
+        },
+        {
+          "command": "rightogo.runScriptInNewWindow",
           "when": "resourceLangId == go"
         },
         {
@@ -103,6 +157,16 @@
           "type": "boolean",
           "default": true,
           "description": "Remove temporary execution directories created for standalone scripts."
+        },
+        "rightogo.promptForArgumentsOnRun": {
+          "type": "boolean",
+          "default": false,
+          "description": "Prompt for CLI arguments every time the run command is executed."
+        },
+        "rightogo.runInNewWindowTerminalByDefault": {
+          "type": "boolean",
+          "default": false,
+          "description": "Try moving the RighToGo terminal into a new window on run."
         }
       }
     }

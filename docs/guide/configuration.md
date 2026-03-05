@@ -18,12 +18,26 @@
 - Default: `true`
 - Uso: remove diretório temporário no fim da execução efêmera.
 
+## `rightogo.promptForArgumentsOnRun`
+
+- Tipo: `boolean`
+- Default: `false`
+- Uso: quando `true`, o comando padrão de execução sempre abre a caixa de diálogo de argumentos.
+
+## `rightogo.runInNewWindowTerminalByDefault`
+
+- Tipo: `boolean`
+- Default: `false`
+- Uso: quando `true`, a extensão tenta mover o terminal de execução para uma nova janela do VSCode.
+
 ## Exemplo de configuração (`settings.json`)
 
 ```json
 {
   "rightogo.goBinaryPath": "/home/user/.go/bin/go",
-  "rightogo.cleanupTemporaryDirectory": true
+  "rightogo.cleanupTemporaryDirectory": true,
+  "rightogo.promptForArgumentsOnRun": false,
+  "rightogo.runInNewWindowTerminalByDefault": false
 }
 ```
 

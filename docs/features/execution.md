@@ -4,6 +4,25 @@
 
 A execução é orquestrada pela extensão e delegada ao Terminal Integrado.
 
+## Modos de UX para disparo da execução
+
+- Botão Play no título do editor.
+- Command Palette.
+- Menu de contexto do editor.
+- Menu de contexto do explorer (arquivo `.go`).
+
+## Passagem rápida de argumentos
+
+Use o comando:
+
+- `RighToGo: Run Current Go Script (With Args)`
+
+A extensão abre uma caixa de diálogo para inserir argumentos e os repassa para o processo:
+
+```bash
+go run <arquivo.go> <args...>
+```
+
 ## Sequência no modo com `go.mod`
 
 ```bash
@@ -45,3 +64,13 @@ func main() {
     fmt.Println("Olá", name)
 }
 ```
+
+## Execução em nova janela
+
+Use o comando:
+
+- `RighToGo: Run Current Go Script (New Window)`
+
+Ou habilite `rightogo.runInNewWindowTerminalByDefault = true`.
+
+A extensão tenta mover o terminal de execução para uma nova janela do VSCode e, se não houver suporte na build atual, usa fallback para painel.

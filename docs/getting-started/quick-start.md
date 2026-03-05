@@ -19,6 +19,8 @@ func main() {
 Use o botão no título do editor ou a Command Palette.
 
 - `RighToGo: Run Current Go Script`
+- `RighToGo: Run Current Go Script (With Args)` para passar argumentos rapidamente.
+- Também disponível no menu de contexto (clique direito no editor/explorer).
 
 ## 3. Observe a execução no Terminal Integrado
 

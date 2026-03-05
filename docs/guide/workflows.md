@@ -39,3 +39,16 @@ Saída esperada:
 
 - JS compilado em `dist/`
 - `.vsix` em `bin/`
+
+## Fluxo 5: Execução com argumentos
+
+1. Abra o arquivo `.go` elegível.
+2. Execute `RighToGo: Run Current Go Script (With Args)`.
+3. Informe argumentos no input rápido (ex: `--port 8080 --name "John Doe"`).
+4. Valide o comportamento no terminal.
+
+## Fluxo 6: Execução destacada em nova janela
+
+1. Use `RighToGo: Run Current Go Script (New Window)`.
+2. A extensão tenta mover o terminal para uma nova janela do VSCode.
+3. Se a build não suportar o comando de mover janela, a execução continua no painel principal.

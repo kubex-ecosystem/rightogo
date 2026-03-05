@@ -1,5 +1,19 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Comando `Run Current Go Script (With Args)` para passagem rápida de argumentos.
+- Comando `Run Current Go Script (New Window)` para tentar destacar terminal em nova janela.
+- Entradas no menu de contexto do editor e explorer para execução direta.
+- Configuração `rightogo.promptForArgumentsOnRun`.
+- Configuração `rightogo.runInNewWindowTerminalByDefault`.
+
+### Changed
+
+- Resolução de `rightogo.goBinaryPath` com suporte a placeholders (`${userHome}`, `${env:VAR}`, `${workspaceFolder}`, `~`) e fallback resiliente.
+
 ## [1.0.0] - 2026-03-04
 
 ### Added

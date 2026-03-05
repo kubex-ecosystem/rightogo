@@ -8,7 +8,8 @@ export type CommandExecutor = (command: string, args: string[]) => Promise<void>
 export function buildEphemeralCommandSequence(
   goBinaryPath: string,
   targetFileName: string,
-  moduleName = 'rightogo_temp_run'
+  moduleName = 'rightogo_temp_run',
+  programArgs: string[] = []
 ): CommandInvocation[] {
   return [
     {
@@ -21,7 +22,7 @@ export function buildEphemeralCommandSequence(
     },
     {
       command: goBinaryPath,
-      args: ['run', targetFileName]
+      args: ['run', targetFileName, ...programArgs]
     }
   ];
 }
@@ -39,8 +40,9 @@ export async function runEphemeralWithoutGoMod(
   goBinaryPath: string,
   targetFileName: string,
   executor: CommandExecutor,
-  moduleName = 'rightogo_temp_run'
+  moduleName = 'rightogo_temp_run',
+  programArgs: string[] = []
 ): Promise<void> {
-  const sequence = buildEphemeralCommandSequence(goBinaryPath, targetFileName, moduleName);
+  const sequence = buildEphemeralCommandSequence(goBinaryPath, targetFileName, moduleName, programArgs);
   await executeEphemeralCommandSequence(sequence, executor);
 }
