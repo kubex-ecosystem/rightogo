@@ -1,27 +1,27 @@
 # Validation System
 
-## Camada de UI
+## UI layer
 
-O botão Play no `editor/title` só aparece quando:
+The Play button is shown only when:
 
-- `resourceLangId == go`
-- `editorTextMatches` indica `package main`
+- the context key `rightogo.canRunActiveGoFile` is `true`
+- active file satisfies Go script eligibility
 
-## Camada de comando (gate final)
+## Command layer (final gate)
 
-Além da UI, o comando valida novamente:
+At execution time, RighToGo validates again:
 
-- editor ativo existente
-- arquivo salvo
-- extensão `.go`
-- primeira linha de código válida com `package main`
-- disponibilidade do binário Go
+- active/target file exists
+- file is saved
+- extension is `.go`
+- first valid code line is `package main`
+- Go binary is available
 
-## Objetivo da dupla validação
+## Why dual validation
 
-- Melhor UX visual
-- Segurança funcional no runtime
-- Menor chance de execução fora do escopo esperado
+- Better visual UX.
+- Runtime safety.
+- Lower chance of out-of-scope execution.
 
-!!! tip "Defesa em profundidade"
-    A validação no comando evita depender exclusivamente de estado visual ou contexto parcial do editor.
+!!! tip "Defense in depth"
+    Command-level validation prevents reliance on UI-only state.

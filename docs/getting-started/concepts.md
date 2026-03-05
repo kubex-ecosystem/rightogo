@@ -1,39 +1,39 @@
 # Basic Concepts
 
-## Elegibilidade do script
+## Script eligibility
 
-RighToGo só executa arquivo com perfil de programa executável:
+RighToGo only runs files that match executable script criteria:
 
-- linguagem Go
-- extensão `.go`
-- primeira linha de código válida com `package main`
+- Go language file
+- `.go` extension
+- first valid code line is `package main`
 
-## Dois modos de execução
+## Two execution modes
 
 === "Project Mode"
 
-    Usa diretório local do arquivo quando existe `go.mod`.
+    Uses the file directory when `go.mod` exists.
 
     ```bash
-    go run <arquivo.go>
+    go run <file.go>
     ```
 
 === "Ephemeral Mode"
 
-    Cria ambiente temporário quando não existe `go.mod`.
+    Creates a temporary environment when `go.mod` is missing.
 
     ```bash
     go mod init rightogo_temp_run
     go mod tidy
-    go run <arquivo.go>
+    go run <file.go>
     ```
 
-## Telemetria local de erro
+## Local error context
 
-O estado da última execução falha é armazenado para o fluxo de análise com LLM/MCP (placeholder local no MVP).
+The latest failed run snapshot is persisted for the LLM/MCP bridge flow (local MVP placeholder).
 
-## Limpeza de temporário
+## Temporary cleanup
 
-A configuração `rightogo.cleanupTemporaryDirectory` controla se a pasta efêmera será removida ao final.
+`rightogo.cleanupTemporaryDirectory` controls whether ephemeral directories are removed after execution.
 
 - default: `true`

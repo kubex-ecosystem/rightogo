@@ -1,6 +1,6 @@
 site_name: RighToGo by Kubex Ecosystem
-site_description: Uma extensão para VSCode criada para reduzir a fricção de executar scripts Go efêmeros.
-site_author: Kubex Ecosystems
+site_description: A VSCode extension designed to reduce friction when running ephemeral Go scripts.
+site_author: Kubex Ecosystem
 site_url: https://rightogo.kubex.world
 
 repo_name: kubex-ecosystem/rightogo

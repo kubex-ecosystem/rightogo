@@ -1,21 +1,22 @@
 # Extension API
 
-## Pontos de extensão atuais
+## Current extension points
 
-- Comandos VSCode registrados em `activate()`.
-- Serviços internos para elegibilidade e sequência efêmera.
-- Ponte local para análise LLM/MCP (stub).
+- VSCode commands registered in `activate()`.
+- Internal service modules for eligibility and ephemeral sequence planning.
+- Local bridge for LLM/MCP analysis (MVP stub).
 
-## Contratos internos relevantes
+## Relevant internal contracts
 
 ```ts
 isMainPackageScript(fileText: string): boolean
 buildEphemeralCommandSequence(goBinaryPath: string, targetFileName: string): CommandInvocation[]
 executeEphemeralCommandSequence(sequence, executor): Promise<void>
+parseProgramArguments(rawInput: string): ParsedArgsResult
 ```
 
-## Estratégia para evolução
+## Evolution strategy
 
-- Manter contratos puros para teste unitário/integrado.
-- Isolar lógica de shell/script em serviços dedicados.
-- Evoluir `llmBridge` para interface de provider sem acoplamento de vendor.
+- Keep pure contracts for testability.
+- Isolate shell generation and process execution logic.
+- Evolve `llmBridge` into provider-agnostic integration.

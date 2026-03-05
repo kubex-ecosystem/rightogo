@@ -1,8 +1,8 @@
 # Quick Start
 
-## 1. Abra um script Go elegível
+## 1. Open an eligible Go script
 
-O botão de execução aparece para arquivos Go com `package main`.
+The run button is shown for Go files with `package main`.
 
 ```go
 package main
@@ -14,31 +14,31 @@ func main() {
 }
 ```
 
-## 2. Execute pelo botão Play
+## 2. Run from UI or context menus
 
-Use o botão no título do editor ou a Command Palette.
+Use the editor title button, Command Palette, or context menu.
 
 - `RighToGo: Run Current Go Script`
-- `RighToGo: Run Current Go Script (With Args)` para passar argumentos rapidamente.
-- Também disponível no menu de contexto (clique direito no editor/explorer).
+- `RighToGo: Run Current Go Script (With Args)`
+- `RighToGo: Run Current Go Script (New Window)`
 
-## 3. Observe a execução no Terminal Integrado
+## 3. Check output in Integrated Terminal
 
-A extensão usa o **RighToGo Terminal** para suportar:
+RighToGo uses **RighToGo Terminal** for:
 
 - `stdout/stderr`
-- `stdin` (scripts interativos com `fmt.Scanln`, por exemplo)
+- `stdin` (interactive scripts, e.g. `fmt.Scanln`)
 
-## 4. Teste o comando de análise (stub)
+## 4. Test the analysis command (stub)
 
 - `RighToGo: Ask LLM About This Script`
 
-Esse comando coleta:
+It collects:
 
-- texto do editor ativo
-- último erro capturado de execução (quando existir)
+- active editor content
+- latest captured run error (when available)
 
-## 5. Rode os testes automatizados
+## 5. Run automated tests
 
 ```bash
 pnpm test
