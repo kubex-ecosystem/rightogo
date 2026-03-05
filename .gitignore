@@ -1,1 +1,77 @@
-.notes/PROMPT_A01.md
+# Virtual Environments
+.venv/
+.venv-hooks
+
+# Build outputs
+*.vsix
+.vscode-test/
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+*_linux_amd64
+*_linux_amd64*
+
+# Node.js
+.next/
+out/
+dist/
+build/*.js
+build/*.css
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# React
+!build/index.html
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+log/workspace_sync.log
+
+# Temporary files
+tmp/
+temp/
+**/tmp_examples/*
+
+# Environment variables
+.env
+.env.local
+
+# Dev Environment Context
+.notes/
+.codex/
+.notes
+bkp/
+
+# Docs Extras and Residual
+docs/prompt/
+docs-site
+support/docs/site/
+support/docs/new_docs/
+support/docs/old_docs/
+support/docs/patch/

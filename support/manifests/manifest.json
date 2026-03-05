@@ -1,0 +1,43 @@
+{
+  "name": "RighToGo by Kubex Ecosystem",
+  "application": "rightogo",
+  "version": "1.0.0",
+  "private": true,
+  "published": false,
+  "aliases": [
+    "rtgo"
+  ],
+  "repository": "https://github.com/kubex-ecosystem/rightogo",
+  "homepage": "https://rightogo.kubex.world/",
+  "description": "RighToGo é uma extensão VSIX para criada para reduzir a fricção de executar scripts Go efêmeros.",
+  "bin": "rightogo",
+  "author": "Rafael Mori <faelmori@gmail.com>",
+  "organization": "kubex-ecosystem",
+  "license": "MIT",
+  "keywords": [
+    "rightogo",
+    "kubex",
+    "control",
+    "tool",
+    "management"
+  ],
+  "platforms": [
+    "linux/amd64",
+    "linux/arm64",
+    "linux/386",
+    "windows/amd64",
+    "windows/arm64",
+    "darwin/amd64",
+    "darwin/arm64"
+  ],
+  "dependencies": [
+    "tar",
+    "gzip",
+    "curl",
+    "git",
+    "zip",
+    "unzip",
+    "jq",
+    "upx"
+  ]
+}

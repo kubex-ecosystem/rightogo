@@ -1,0 +1,122 @@
+{
+  "name": "rightogo",
+  "displayName": "RighToGo",
+  "description": "Run standalone Go scripts quickly from VSCode, with ephemeral go.mod support.",
+  "version": "1.0.0",
+  "publisher": "rightogo",
+  "license": "MIT",
+  "qna": "marketplace",
+  "readme": "README.md",
+  "markdown": "github",
+  "api": "none",
+  "main": "./dist/extension.js",
+  "bin": {
+    "rightogo": "./bin/rightogo.js"
+  },
+  "files": [
+    "bin/",
+    "dist/",
+    "resources/",
+    "CLI-README.md",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "vscode": "^1.95.0",
+    "node": ">=16.0.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "RighToGo supports untrusted workspaces with limited functionality. Some features may be restricted for security reasons."
+    }
+  },
+  "extensionKind": [
+    "ui"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "rightogo.runScript",
+        "title": "RighToGo: Run Current Go Script",
+        "icon": "$(play)"
+      },
+      {
+        "command": "rightogo.askLlmAboutScript",
+        "title": "RighToGo: Ask LLM About This Script",
+        "icon": "$(comment-discussion)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "rightogo.runScript",
+          "group": "navigation@100",
+          "when": "resourceLangId == go && editorTextMatches =~ /^\\s*package\\s+main\\b/m"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "rightogo.runScript",
+          "when": "resourceLangId == go"
+        },
+        {
+          "command": "rightogo.askLlmAboutScript"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "RighToGo",
+      "properties": {
+        "rightogo.goBinaryPath": {
+          "type": "string",
+          "default": "${HOME:-}/.go/bin/go",
+          "description": "Absolute path to the Go binary used by RighToGo."
+        },
+        "rightogo.cleanupTemporaryDirectory": {
+          "type": "boolean",
+          "default": true,
+          "description": "Remove temporary execution directories created for standalone scripts."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "npm run check-types && npm run lint && npm run compile && npm run package",
+    "build:tsgo": "npm run check-types:tsgo && npm run lint && npm run compile:tsgo && npm run package",
+    "compile": "tsc -p ./",
+    "compile:tsgo": "tsgo -p ./",
+    "watch": "tsc -watch -p ./",
+    "watch:tsgo": "tsgo -watch -p ./",
+    "pretest": "tsc -p ./",
+    "pretest:tsgo": "tsgo -p ./",
+    "check-types": "tsc --noEmit",
+    "check-types:tsgo": "tsgo -p ./tsconfig.json --noEmit ",
+    "test": "node ./dist/test/runTest.js",
+    "lint": "eslint src",
+    "package": "node esbuild.js --production"
+  },
+  "devDependencies": {
+    "@types/chai": "^5.2.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.13.1",
+    "@types/vscode": "^1.95.0",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
+    "@vscode/test-electron": "^2.5.2",
+    "chai": "^5.2.1",
+    "esbuild": "^0.27.3",
+    "eslint": "^10.0.2",
+    "glob": "^13.0.0",
+    "mocha": "^11.1.0",
+    "typescript": "^5.7.3"
+  }
+}
