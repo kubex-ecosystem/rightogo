@@ -10,17 +10,25 @@
   "markdown": "github",
   "api": "none",
   "main": "./dist/extension.js",
+  "homepage": "https://github.com/kubex-ecosystem/rightogo#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kubex-ecosystem/rightogo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kubex-ecosystem/rightogo/issues"
+  },
+  "author": {
+    "name": "Rafael Mori",
+    "email": "faelmori@gmail.com"
+  },
   "bin": {
     "rightogo": "./bin/rightogo.js"
   },
   "files": [
-    "bin/",
     "dist/",
-    "resources/",
-    "CLI-README.md",
     "README.md",
-    "LICENSE",
-    "CHANGELOG.md"
+    "LICENSE"
   ],
   "publishConfig": {
     "access": "public"
@@ -85,13 +93,14 @@
           "type": "boolean",
           "default": true,
           "description": "Remove temporary execution directories created for standalone scripts."
-        }
+        },
+        "pgsql.connections.items": true
       }
     }
   },
   "scripts": {
-    "build": "npm run check-types && npm run lint && npm run compile && npm run package",
-    "build:tsgo": "npm run check-types:tsgo && npm run lint && npm run compile:tsgo && npm run package",
+    "build": "npm run check-types && npm run lint && npm run compile && npm run vscode:build",
+    "build:tsgo": "npm run check-types:tsgo && npm run lint && npm run compile:tsgo && npm run vscode:build",
     "compile": "tsc -p ./",
     "compile:tsgo": "tsgo -p ./",
     "watch": "tsc -watch -p ./",
@@ -102,7 +111,9 @@
     "check-types:tsgo": "tsgo -p ./tsconfig.json --noEmit ",
     "test": "node ./dist/test/runTest.js",
     "lint": "eslint src",
-    "package": "node esbuild.js --production"
+    "package": "node esbuild.js --production",
+    "vscode:build": "npm run ensure:bindir && vsce package --out \"./bin/$(basename $(realpath ./))-$(node -p \"require('./package.json').version\").vsix\"",
+    "ensure:bindir": " mkdir -p ./bin"
   },
   "devDependencies": {
     "@types/chai": "^5.2.0",

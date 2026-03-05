@@ -1,8 +1,0 @@
-**/.git/**
-**/.vscode/**
-**/.notes/**
-docs/**
-node_modules/**
-src/**
-tsconfig.json
-support/**

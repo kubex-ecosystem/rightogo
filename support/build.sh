@@ -72,7 +72,4 @@ build_project() {
   fi
 }
 
-(build_project) || {
-  log fatal "An error occurred during the pre-build process." | tee /dev/stderr
-  exit 1
-}
+export -f build_project

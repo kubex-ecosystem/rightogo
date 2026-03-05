@@ -3,7 +3,7 @@
 .venv-hooks
 
 # Build outputs
-*.vsix
+**/*.vsix
 .vscode-test/
 
 # Go

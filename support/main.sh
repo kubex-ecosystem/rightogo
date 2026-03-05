@@ -9,6 +9,8 @@ __secure_logic_use_type="exec"
 __secure_logic_init_timestamp="$(date +%s)"
 __secure_logic_elapsed_time=0
 
+export NO_MKDOCS_2_WARNING=1
+
 # Check if verbose mode is enabled
 if [[ "${MYNAME_VERBOSE:-false}" == "true" ]]; then
   set -x  # Enable debugging
@@ -349,7 +351,7 @@ __main() {
         }
 
         if [[ -f "${_ROOT_DIR:-}/support/docs/requirements.txt" ]]; then
-          uv --no-progress --quiet pip install -r "${_ROOT_DIR:-}/support/docs/requirements.txt"
+          uv --no-progress --quiet pip install -r "${_ROOT_DIR:-}/support/docs/requirements.txt" --link-mode=copy
         elif [[ -f "${_ROOT_DIR:-}/support/docs/pyproject.toml" ]]; then
           uv --no-progress --quiet sync --project="${_ROOT_DIR:-}/support/docs/pyproject.toml"
         else
@@ -406,12 +408,22 @@ __main() {
         fi
       fi
 
-      mkdocs serve -a "0.0.0.0:8081" -f "${_ROOT_DIR:-}/support/docs/mkdocs.yml" --dirtyreload -q || {
+      mkdocs serve -a "0.0.0.0:8080" -f "${_ROOT_DIR:-}/support/docs/mkdocs.yml" --dirtyreload -q &
+
+      _DOCS_SERVER=$!
+
+      if [[ $? -gt 0 ]]; then
         log error "Failed to serve documentation."
         return 1
-      }
+      fi
 
-      log success "Documentation server successfully ran at http://localhost:8081/docs"
+      log success "Documentation server successfully ran at http://localhost:8080/docs"
+
+      if command -v xdg-open >/dev/null 2>&1; then
+        bash -c 'sleep 1 && xdg-open "http://localhost:8080/docs"' &
+      fi
+
+      wait $_DOCS_SERVER
       ;;
 
     pub-docs|PUB-DOCS|-pd|-PD)
@@ -557,23 +569,9 @@ main() {
     log fatal "Failed to display process information." true
   }
 
-  if [[ "${_RUN_PRE_SCRIPTS:-true}" != "false" ]]; then
-    __run_custom_scripts "pre" "${_main_args[@]}" || {
-      log error "pre-installation scripts: $?"
-      log fatal "Failed to execute pre-installation scripts." true
-    }
-  fi
-
   __secure_logic_main "${_main_args[@]}" || {
     log fatal "Script execution failed." true
   }
-
-  if [[ "${_RUN_POST_SCRIPTS:-true}" != "false" ]]; then
-    __run_custom_scripts "post" "${_main_args[@]}" || {
-      log error "post-installation scripts: $?"
-      log fatal "Failed to execute post-installation scripts." true
-    }
-  fi
 
   __secure_logic_elapsed_time="$(($(date +%s) - __secure_logic_init_timestamp))"
 

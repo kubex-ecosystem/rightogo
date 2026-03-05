@@ -125,6 +125,9 @@ fi
 
 clear_script_cache() {
   trap - EXIT HUP INT QUIT ABRT ALRM TERM
+  
+  pkill -f 'mkdocs' >/dev/null 2>&1 || true
+
   if [[ ! -d "${_TEMP_DIR:-}" ]]; then
     return 0
   fi
@@ -143,17 +146,17 @@ clear_script_cache() {
 
 clear_build_artifacts() {
   clear_script_cache
-  local build_dir="${_ROOT_DIR:-$(realpath '../')}/dist"
-  if [[ -d "${build_dir}" ]]; then
-    rm -rf "${build_dir}" || true
-    if [[ -d "${build_dir}" ]]; then
-      log error "Failed to remove build artifacts in ${build_dir}."
-    else
-      log success "Build artifacts removed from ${build_dir}."
-    fi
-  else
-    log notice "No build artifacts found in ${build_dir}."
-  fi
+  # local build_dir="${_ROOT_DIR:-$(realpath '../')}/dist"
+  # if [[ -d "${build_dir}" ]]; then
+  #   rm -rf "${build_dir}" || true
+  #   if [[ -d "${build_dir}" ]]; then
+  #     log error "Failed to remove build artifacts in ${build_dir}."
+  #   else
+  #     log success "Build artifacts removed from ${build_dir}."
+  #   fi
+  # else
+  #   log notice "No build artifacts found in ${build_dir}."
+  # fi
 }
 
 set_trap() {
