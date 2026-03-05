@@ -10,6 +10,11 @@
   "markdown": "github",
   "api": "none",
   "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:go",
+    "onCommand:rightogo.runScript",
+    "onCommand:rightogo.askLlmAboutScript"
+  ],
   "homepage": "https://github.com/kubex-ecosystem/rightogo#readme",
   "repository": {
     "type": "git",
@@ -68,7 +73,7 @@
         {
           "command": "rightogo.runScript",
           "group": "navigation@100",
-          "when": "resourceLangId == go && editorTextMatches =~ /^\\s*package\\s+main\\b/m"
+          "when": "rightogo.canRunActiveGoFile"
         }
       ],
       "commandPalette": [
@@ -87,14 +92,18 @@
         "rightogo.goBinaryPath": {
           "type": "string",
           "default": "${userHome}/.go/bin/go",
-          "description": "Absolute path to the Go binary used by RighToGo."
+          "description": "Absolute path to the Go binary used by RighToGo.",
+          "examples": [
+            "~/.go/bin/go",
+            "$HOME/.go/bin/go",
+            "/home/user/.go/bin/go"
+          ]
         },
         "rightogo.cleanupTemporaryDirectory": {
           "type": "boolean",
           "default": true,
           "description": "Remove temporary execution directories created for standalone scripts."
-        },
-        "pgsql.connections.items": true
+        }
       }
     }
   },

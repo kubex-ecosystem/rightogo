@@ -13,6 +13,7 @@ const OUTPUT_NAME = 'RighToGo';
 const CONFIG_NAMESPACE = 'rightogo';
 const PROJECT_COMMAND_ID = 'rightogo.runScript';
 const ASK_LLM_COMMAND_ID = 'rightogo.askLlmAboutScript';
+const RUN_CONTEXT_KEY = 'rightogo.canRunActiveGoFile';
 
 type RunMode = 'project' | 'ephemeral';
 
@@ -87,6 +88,12 @@ export function activate(context: vscode.ExtensionContext): void {
   const output = vscode.window.createOutputChannel(OUTPUT_NAME);
   context.subscriptions.push(output);
 
+  const refreshContext = (): void => {
+    void updateRunCommandContext();
+  };
+
+  refreshContext();
+
   context.subscriptions.push(
     vscode.window.onDidCloseTerminal((closedTerminal) => {
       if (quickRunTerminal && closedTerminal === quickRunTerminal) {
@@ -104,6 +111,27 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.commands.registerCommand(ASK_LLM_COMMAND_ID, async () => {
       await askLlmCommand(output);
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.window.onDidChangeActiveTextEditor(() => {
+      refreshContext();
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeTextDocument((event) => {
+      const activeEditor = vscode.window.activeTextEditor;
+      if (activeEditor && event.document.uri.toString() === activeEditor.document.uri.toString()) {
+        refreshContext();
+      }
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.workspace.onDidSaveTextDocument(() => {
+      refreshContext();
     })
   );
 }
@@ -151,11 +179,10 @@ async function runScriptCommand(output: vscode.OutputChannel): Promise<void> {
   const configuredBinary = (config.get<string>('goBinaryPath') ?? '').trim();
   const cleanupTemp = config.get<boolean>('cleanupTemporaryDirectory', true);
 
-  const goBinaryPath = configuredBinary.length > 0 ? configuredBinary : 'go';
-  const isBinaryReady = await verifyGoBinary(goBinaryPath, output);
-  if (!isBinaryReady) {
+  const goBinaryPath = await resolveGoBinaryPath(configuredBinary, output);
+  if (!goBinaryPath) {
     vscode.window.showErrorMessage(
-      `${EXTENSION_NAME}: Go binary unavailable. Check "${CONFIG_NAMESPACE}.goBinaryPath".`
+      `${EXTENSION_NAME}: Go binary unavailable. Check "${CONFIG_NAMESPACE}.goBinaryPath" or your PATH.`
     );
     return;
   }
@@ -218,7 +245,38 @@ async function askLlmCommand(output: vscode.OutputChannel): Promise<void> {
   );
 }
 
+async function updateRunCommandContext(): Promise<void> {
+  const isRunnable = isRunnableActiveEditor(vscode.window.activeTextEditor);
+  await vscode.commands.executeCommand('setContext', RUN_CONTEXT_KEY, isRunnable);
+}
+
+function isRunnableActiveEditor(editor: vscode.TextEditor | undefined): boolean {
+  if (!editor) {
+    return false;
+  }
+
+  const document = editor.document;
+  if (document.languageId !== 'go') {
+    return false;
+  }
+
+  if (document.isUntitled) {
+    return false;
+  }
+
+  if (path.extname(document.fileName) !== '.go') {
+    return false;
+  }
+
+  return isMainPackageScript(document.getText());
+}
+
 async function verifyGoBinary(goBinaryPath: string, output: vscode.OutputChannel): Promise<boolean> {
+  if (/\$\{[^}]+\}/.test(goBinaryPath)) {
+    output.appendLine(`[${EXTENSION_NAME}] unresolved variable in Go binary path: ${goBinaryPath}`);
+    return false;
+  }
+
   if (path.isAbsolute(goBinaryPath) && !fsSync.existsSync(goBinaryPath)) {
     output.appendLine(`[${EXTENSION_NAME}] Go binary path does not exist: ${goBinaryPath}`);
     return false;
@@ -238,6 +296,61 @@ async function verifyGoBinary(goBinaryPath: string, output: vscode.OutputChannel
     output.appendLine(`[${EXTENSION_NAME}] Error validating Go binary: ${reason}`);
     return false;
   }
+}
+
+async function resolveGoBinaryPath(
+  configuredBinaryPath: string,
+  output: vscode.OutputChannel
+): Promise<string | undefined> {
+  const candidates = buildGoBinaryCandidates(configuredBinaryPath);
+  for (const candidate of candidates) {
+    if (!candidate) {
+      continue;
+    }
+    if (await verifyGoBinary(candidate, output)) {
+      if (configuredBinaryPath.trim().length > 0 && candidate !== configuredBinaryPath.trim()) {
+        output.appendLine(`[${EXTENSION_NAME}] using resolved Go binary path: ${candidate}`);
+      }
+      return candidate;
+    }
+  }
+
+  return undefined;
+}
+
+function buildGoBinaryCandidates(configuredBinaryPath: string): string[] {
+  const normalizedConfigured = configuredBinaryPath.trim();
+  const candidates: string[] = [];
+
+  if (normalizedConfigured.length > 0) {
+    candidates.push(resolvePathTemplate(normalizedConfigured));
+  }
+
+  const defaultLocalGo = path.join(os.homedir(), '.go', 'bin', process.platform === 'win32' ? 'go.exe' : 'go');
+  candidates.push(defaultLocalGo);
+  candidates.push(process.platform === 'win32' ? 'go.exe' : 'go');
+
+  return [...new Set(candidates)];
+}
+
+function resolvePathTemplate(value: string): string {
+  const workspaceFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath ?? '';
+  let resolved = value;
+
+  resolved = resolved.replace(/\$\{userHome\}/g, os.homedir());
+  resolved = resolved.replace(/\$\{workspaceFolder\}/g, workspaceFolder);
+  resolved = resolved.replace(/\$\{env:([^}]+)\}/g, (_, variableName: string) => {
+    return process.env[variableName] ?? '';
+  });
+
+  if (resolved === '~') {
+    return os.homedir();
+  }
+  if (resolved.startsWith('~/')) {
+    return path.join(os.homedir(), resolved.slice(2));
+  }
+
+  return resolved;
 }
 
 function getOrCreateTerminal(): vscode.Terminal {

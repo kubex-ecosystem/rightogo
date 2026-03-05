@@ -3,8 +3,14 @@
 ## `rightogo.goBinaryPath`
 
 - Tipo: `string`
-- Default: `${HOME:-}/.go/bin/go`
+- Default: `${userHome}/.go/bin/go`
 - Uso: caminho absoluto do binário Go usado pela extensão.
+- Suporte de template (resolvido pela extensão):
+  - `${userHome}`
+  - `${env:NOME_DA_VARIAVEL}`
+  - `${workspaceFolder}`
+  - `~` e `~/...`
+- Fallback automático quando inválido: `${userHome}/.go/bin/go` e depois `go` no `PATH`.
 
 ## `rightogo.cleanupTemporaryDirectory`
 
