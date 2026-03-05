@@ -3,7 +3,7 @@
   "displayName": "RighToGo",
   "description": "Run standalone Go scripts quickly from VSCode, with ephemeral go.mod support.",
   "version": "1.0.0",
-  "publisher": "rightogo",
+  "publisher": "rafa-mori",
   "license": "MIT",
   "qna": "marketplace",
   "readme": "README.md",

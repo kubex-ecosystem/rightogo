@@ -8,8 +8,6 @@
 
 ---
 
-[🇧🇷 Read in Portuguese](./README.pt-BR.md)
-
 RighToGo é uma extensão para VSCode criada para reduzir a fricção de executar scripts Go efêmeros. O objetivo é permitir ciclos rápidos de teste sem obrigar setup manual de projeto em cada snippet.
 
 ## Propósito

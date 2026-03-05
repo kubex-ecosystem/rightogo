@@ -21,6 +21,7 @@ go.work
 # Node.js
 .next/
 out/
+bin/
 dist/
 build/*.js
 build/*.css
