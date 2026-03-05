@@ -8,88 +8,87 @@
 
 ---
 
-[🇧🇷 Read in Portuguese](./README.pt-BR.md)
+[🇧🇷 Portuguese documentation](./docs/README.pt-BR.md)
 
-RighToGo é uma extensão para VSCode criada para reduzir a fricção de executar scripts Go efêmeros. O objetivo é permitir ciclos rápidos de teste sem obrigar setup manual de projeto em cada snippet.
+RighToGo is a VSCode extension designed to remove friction when running ephemeral Go scripts. It enables fast testing cycles without requiring manual project setup for every snippet.
 
-## Propósito
+## Purpose
 
-- Executar scripts Go com um clique em contexto de editor.
-- Eliminar o bloqueio de `go.mod` para arquivos soltos.
-- Preservar experiência interativa com `stdin` e `stdout` via Terminal Integrado.
+- Run Go scripts with one click from the editor.
+- Remove the `go.mod` blocker for standalone files.
+- Preserve interactive execution (`stdin` / `stdout`) through the integrated terminal.
 
-## Como Funciona
+## How It Works
 
-### 1) Arquivo dentro de projeto com `go.mod`
+### 1) File inside a project with `go.mod`
 
-- A extensão detecta `go.mod` no diretório do arquivo.
-- Executa `go run <arquivo.go>` no `RighToGo Terminal`.
+- Detects `go.mod` in the file directory.
+- Runs `go run <file.go>` in the `RighToGo Terminal`.
 
-### 2) Arquivo solto sem `go.mod`
+### 2) Standalone file without `go.mod`
 
-- Cria diretório temporário.
-- Copia o arquivo Go.
-- Executa sequência:
+- Creates a temporary directory.
+- Copies the current Go file.
+- Executes:
   - `go mod init rightogo_temp_run`
   - `go mod tidy`
-  - `go run <arquivo.go>`
-- Remove o diretório temporário ao final quando `rightogo.cleanupTemporaryDirectory = true` (default).
+  - `go run <file.go>`
+- Cleans up the temporary directory when `rightogo.cleanupTemporaryDirectory = true` (default).
 
-## Comandos
+## Commands
 
 - `RighToGo: Run Current Go Script`
 - `RighToGo: Run Current Go Script (With Args)`
 - `RighToGo: Run Current Go Script (New Window)`
-- `RighToGo: Ask LLM About This Script` (stub local, sem rede)
+- `RighToGo: Ask LLM About This Script` (local stub, no network call)
 
-## Configurações
+## Settings
 
-- `rightogo.goBinaryPath`: caminho do binário Go.
+- `rightogo.goBinaryPath`: Go binary path.
   - default: `${userHome}/.go/bin/go`
-  - suporte a `${userHome}`, `${env:VAR}`, `${workspaceFolder}`, `~`
-- `rightogo.cleanupTemporaryDirectory`: remove pasta temporária após execução.
+  - supports `${userHome}`, `${env:VAR}`, `${workspaceFolder}`, `~`
+- `rightogo.cleanupTemporaryDirectory`: cleanup temporary directory after execution.
   - default: `true`
-- `rightogo.promptForArgumentsOnRun`: abre input de argumentos no comando padrão.
+- `rightogo.promptForArgumentsOnRun`: prompt for arguments on the default run command.
   - default: `false`
-- `rightogo.runInNewWindowTerminalByDefault`: tenta mover terminal para nova janela.
+- `rightogo.runInNewWindowTerminalByDefault`: try moving the run terminal to a new VSCode window.
   - default: `false`
 
-## Build, Teste e Execução Local
+## Build, Test, and Local Run
 
 1. `pnpm install`
 2. `pnpm run compile`
 3. `pnpm test`
-4. Pressione `F5` no VSCode para abrir o Extension Development Host.
-5. Abra um `.go` com `package main` e use o botão Play no título do editor.
+4. Press `F5` in VSCode to open Extension Development Host.
+5. Open a `.go` file with `package main` and click Play.
 
-## Real Cases de Produtividade
+## Real Productivity Cases
 
-- Teste rápido de parser, regex, payload transformer ou helper de infra sem criar projeto completo.
-- Reproduzir bug em script curto com dependência externa e validar correção em minutos.
-- Rodar snippets de troubleshooting com entrada interativa (`fmt.Scanln`) direto no terminal.
-- Criar prova de conceito local para API/client e descartar ambiente efêmero automaticamente.
+- Quick parser/regex/payload helper experiments without full project setup.
+- Fast bug reproduction scripts with external dependencies.
+- Interactive troubleshooting scripts using `fmt.Scanln`.
+- Disposable proofs of concept for API/client behavior.
 
 ## Roadmap / V2
 
-### Integração nativa e interativa com GoSetup (Kubex-Ecosystem)
+### Native Interactive GoSetup Integration (Kubex-Ecosystem)
 
-Quando o Go não estiver disponível no host, RighToGo deixará de apenas emitir erro e oferecerá provisionamento seguro no perfil do usuário.
+When Go is missing, RighToGo will offer safe, user-profile installation instead of only returning an error.
 
-Fluxo proposto:
+Planned flow:
 
-1. Buscar versões em `https://go.dev/dl/?mode=json`.
-2. Extrair `version` e remover prefixo `go` (ex.: `go1.26.0` -> `1.26.0`).
-3. Mostrar versões em `vscode.window.showQuickPick`.
-4. Ao confirmar, abrir Terminal Integrado e executar:
+1. Fetch versions from `https://go.dev/dl/?mode=json`.
+2. Parse `version` and remove `go` prefix (e.g. `go1.26.0` -> `1.26.0`).
+3. Show versions with `vscode.window.showQuickPick`.
+4. On confirmation, run installer in the integrated terminal:
    - Unix/Mac:
-     - `bash -c "$(curl -sSfL 'https://raw.githubusercontent.com/kubex-ecosystem/gosetup/main/go.sh')" -s install <VERSAO_ESCOLHIDA>`
+     - `bash -c "$(curl -sSfL 'https://raw.githubusercontent.com/kubex-ecosystem/gosetup/main/go.sh')" -s install <SELECTED_VERSION>`
    - Windows:
-     - fluxo equivalente em PowerShell usando:
+     - equivalent PowerShell flow using:
      - `https://raw.githubusercontent.com/kubex-ecosystem/gosetup/main/go.ps1`
-     - comando `install <VERSAO_ESCOLHIDA>`
+     - command `install <SELECTED_VERSION>`
 
-Resultado esperado da V2:
+Expected outcome:
 
-- Resiliência total no onboarding do runtime Go.
-- Operação `batteries-included` sem depender de setup manual prévio.
-- Preservação de controle explícito do usuário sobre versão instalada.
+- Full runtime onboarding resilience.
+- Batteries-included behavior with explicit user control over Go version.

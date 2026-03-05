@@ -1,39 +1,39 @@
 # Installation
 
-## Requisitos
+## Requirements
 
 - VSCode `>= 1.95.0`
 - Node.js `>= 16`
-- `pnpm` recomendado para desenvolvimento
-- Go instalado (ou caminho configurado em `rightogo.goBinaryPath`)
+- `pnpm` (recommended for development)
+- Go installed (or configured through `rightogo.goBinaryPath`)
 
-## Instalação para desenvolvimento local
+## Local development setup
 
 ```bash
 pnpm install
 pnpm run compile
 ```
 
-Depois, pressione `F5` no VSCode para abrir o **Extension Development Host**.
+Then press `F5` in VSCode to open the **Extension Development Host**.
 
-## Instalação por pacote `.vsix`
+## Install via `.vsix`
 
-O empacotamento da extensão gera o artefato em `bin/`.
+Packaging outputs the extension artifact to `bin/`.
 
 ```bash
 pnpm run vscode:build
 ```
 
-Exemplo de saída:
+Example output:
 
 ```text
 bin/rightogo-1.0.0.vsix
 ```
 
-## Diretórios de build relevantes
+## Relevant build directories
 
-- Runtime compilado: `dist/`
-- Arquivo de extensão para distribuição: `bin/*.vsix`
+- Compiled runtime: `dist/`
+- Distribution package: `bin/*.vsix`
 
-!!! note "Sobre saída de build"
-    A base atual usa `dist/` como diretório de output para o código compilado da extensão.
+!!! note "Build output"
+    This project uses `dist/` as the TypeScript output directory.

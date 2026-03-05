@@ -1,23 +1,23 @@
 # Best Practices
 
-## Para usuários
+## For users
 
-- Mantenha scripts curtos e focados em uma hipótese por execução.
-- Prefira modo efêmero para experimentos descartáveis.
-- Use projetos com `go.mod` para fluxos persistentes.
+- Keep scripts short and hypothesis-driven.
+- Prefer ephemeral mode for disposable experiments.
+- Use full projects with `go.mod` for persistent workflows.
 
-## Para mantenedores
+## For maintainers
 
-- Preserve validações de elegibilidade na UI e no comando.
-- Priorize execução no Terminal para compatibilidade com stdin.
-- Mantenha cobertura de testes em módulos de decisão (eligibilidade, sequência efêmera).
+- Keep eligibility checks in both UI and command runtime.
+- Prioritize terminal-based execution for `stdin` compatibility.
+- Maintain coverage on decision services (eligibility, ephemeral sequence, args parser).
 
-## Observabilidade mínima
+## Minimum observability
 
-- Registrar falhas relevantes no canal de output da extensão.
-- Preservar preview do erro para o comando de análise LLM/MCP.
+- Log relevant failures to the extension output channel.
+- Preserve concise error previews for the LLM/MCP analysis flow.
 
-## Qualidade
+## Quality gate
 
 ```bash
 pnpm run check-types

@@ -10,6 +10,7 @@
   "markdown": "github",
   "api": "none",
   "main": "./dist/extension.js",
+  "icon": "resources/icon-128x128.png",
   "activationEvents": [
     "onLanguage:go",
     "onCommand:rightogo.runScript",
@@ -34,6 +35,7 @@
   },
   "files": [
     "dist/",
+    "resources/",
     "README.md",
     "LICENSE"
   ],

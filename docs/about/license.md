@@ -1,15 +1,15 @@
 # License
 
-RighToGo é distribuído sob licença MIT.
+RighToGo is distributed under the MIT License.
 
 - Copyright (c) 2026 Kubex-Ecosystem
 
-## Resumo
+## Summary
 
-A licença MIT permite uso, modificação e distribuição, incluindo uso comercial, desde que o aviso de copyright e a licença sejam mantidos.
+MIT allows use, modification, and distribution (including commercial use) as long as copyright and license notices are preserved.
 
-## Texto completo
+## Full text
 
-Consulte o arquivo oficial na raiz do repositório:
+See the official repository license file:
 
 - <https://github.com/kubex-ecosystem/rightogo/blob/main/LICENSE>

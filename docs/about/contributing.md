@@ -1,29 +1,29 @@
 # Contributing
 
-## Diretrizes
+## Guidelines
 
-- Mantenha mudanças focadas e pequenas por PR.
-- Preserve compatibilidade com fluxo atual de execução em Terminal Integrado.
-- Não introduza breaking changes sem proposta prévia.
+- Keep PRs focused and small.
+- Preserve compatibility with terminal-based execution flow.
+- Do not introduce breaking changes without prior proposal.
 
-## Fluxo recomendado
+## Recommended flow
 
 ```bash
-git checkout -b feat/minha-mudanca
+git checkout -b feat/my-change
 pnpm install
 pnpm run check-types
 pnpm run lint
 pnpm test
 ```
 
-## Checklist antes de abrir PR
+## PR checklist
 
-- [ ] Testes passando
-- [ ] Documentação atualizada
-- [ ] Referências de build alinhadas com `dist/`
-- [ ] Se aplicável, validar empacotamento em `bin/*.vsix`
+- [ ] Tests passing
+- [ ] Documentation updated
+- [ ] Build references aligned with `dist/`
+- [ ] If applicable, validate packaging in `bin/*.vsix`
 
-## Escopo de colaboração atual
+## Current collaboration scope
 
-- V1: robustez e manutenção.
-- V2: integração interativa com GoSetup quando Go não estiver disponível no host.
+- V1: robustness and maintainability.
+- V2: interactive GoSetup integration when Go is unavailable.

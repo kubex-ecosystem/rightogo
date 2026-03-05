@@ -1,52 +1,50 @@
 # Commands Reference
 
-## Comandos
+## `rightogo.runScript`
 
-### `rightogo.runScript`
-
-Título no VSCode:
+Display name:
 
 - `RighToGo: Run Current Go Script`
 
-Função:
+Behavior:
 
-- Executa o arquivo Go ativo usando modo de projeto ou efêmero.
-- Também pode ser acionado no menu de contexto do editor e do explorer.
+- Runs the active Go file in project or ephemeral mode.
+- Available in editor title, command palette, and context menus.
 
-### `rightogo.runScriptWithArgs`
+## `rightogo.runScriptWithArgs`
 
-Título no VSCode:
+Display name:
 
 - `RighToGo: Run Current Go Script (With Args)`
 
-Função:
+Behavior:
 
-- Abre uma caixa de diálogo rápida para inserir argumentos.
-- Encaminha os argumentos para o programa Go (`go run <arquivo> <args...>`).
+- Opens a quick input box for arguments.
+- Forwards args to program execution (`go run <file> <args...>`).
 
-### `rightogo.runScriptInNewWindow`
+## `rightogo.runScriptInNewWindow`
 
-Título no VSCode:
+Display name:
 
 - `RighToGo: Run Current Go Script (New Window)`
 
-Função:
+Behavior:
 
-- Executa normalmente e tenta mover o terminal para uma nova janela do VSCode.
-- Se o comando não estiver disponível na build do VSCode, faz fallback para terminal em painel.
+- Executes normally, then attempts to move the terminal into a new VSCode window.
+- Falls back to panel terminal when unsupported.
 
-### `rightogo.askLlmAboutScript`
+## `rightogo.askLlmAboutScript`
 
-Título no VSCode:
+Display name:
 
 - `RighToGo: Ask LLM About This Script`
 
-Função:
+Behavior:
 
-- Coleta contexto local para integração futura com provider LLM/MCP.
-- No MVP, responde por stub local sem chamada de rede.
+- Collects local context for future provider integration.
+- MVP uses a local no-network stub.
 
-## Command Palette
+## Command Palette list
 
 ```text
 > RighToGo: Run Current Go Script

@@ -2,35 +2,35 @@
 
 ## `rightogo.goBinaryPath`
 
-- Tipo: `string`
+- Type: `string`
 - Default: `${userHome}/.go/bin/go`
-- Uso: caminho absoluto do binário Go usado pela extensão.
-- Suporte de template (resolvido pela extensão):
+- Purpose: Go binary path used by RighToGo.
+- Supported templates (resolved by extension):
   - `${userHome}`
-  - `${env:NOME_DA_VARIAVEL}`
+  - `${env:VARIABLE_NAME}`
   - `${workspaceFolder}`
-  - `~` e `~/...`
-- Fallback automático quando inválido: `${userHome}/.go/bin/go` e depois `go` no `PATH`.
+  - `~` and `~/...`
+- Fallback when invalid: `${userHome}/.go/bin/go`, then `go` from `PATH`.
 
 ## `rightogo.cleanupTemporaryDirectory`
 
-- Tipo: `boolean`
+- Type: `boolean`
 - Default: `true`
-- Uso: remove diretório temporário no fim da execução efêmera.
+- Purpose: remove ephemeral execution directories after run.
 
 ## `rightogo.promptForArgumentsOnRun`
 
-- Tipo: `boolean`
+- Type: `boolean`
 - Default: `false`
-- Uso: quando `true`, o comando padrão de execução sempre abre a caixa de diálogo de argumentos.
+- Purpose: always prompt for CLI arguments on the default run command.
 
 ## `rightogo.runInNewWindowTerminalByDefault`
 
-- Tipo: `boolean`
+- Type: `boolean`
 - Default: `false`
-- Uso: quando `true`, a extensão tenta mover o terminal de execução para uma nova janela do VSCode.
+- Purpose: try moving run terminal to a new VSCode window by default.
 
-## Exemplo de configuração (`settings.json`)
+## Example (`settings.json`)
 
 ```json
 {
@@ -41,8 +41,8 @@
 }
 ```
 
-## Boas práticas
+## Best practices
 
-- Defina caminho absoluto para o Go em ambientes com múltiplas instalações.
-- Mantenha limpeza habilitada em uso diário.
-- Desabilite limpeza apenas para debug pontual de problemas de dependência.
+- Prefer absolute Go paths in multi-runtime environments.
+- Keep cleanup enabled for day-to-day usage.
+- Disable cleanup only for targeted debugging.

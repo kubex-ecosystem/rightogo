@@ -1,37 +1,39 @@
 # RighToGo
 
-RighToGo é uma extensão VSCode da Kubex Ecosystem para executar scripts Go de forma rápida, segura e com baixa fricção.
+RighToGo is a Kubex Ecosystem VSCode extension for running Go scripts quickly, safely, and with minimal setup friction.
 
-> Objetivo: permitir ciclos curtos de experimentação em Go, com ou sem projeto estruturado.
+> Goal: enable short Go experimentation cycles, with or without a full project structure.
 
-## O que resolve
+## What it solves
 
-- Evita setup manual de `go.mod` para arquivos soltos.
-- Mantém execução interativa (stdin/stdout) via Terminal Integrado.
-- Fornece validação de elegibilidade para evitar execução indevida de arquivos de biblioteca.
-- Abre caminho para diagnósticos com LLM/MCP (stub no MVP).
+- Avoids manual `go.mod` setup for standalone scripts.
+- Keeps interactive execution (`stdin`/`stdout`) through the integrated terminal.
+- Enforces eligibility checks to prevent incorrect execution of library files.
+- Provides a path for LLM/MCP-assisted diagnostics (MVP stub).
 
-## Fluxo em alto nível
+## High-level flow
 
 ```mermaid
 flowchart LR
-  A["Arquivo Go aberto"] --> B{"Tem go.mod no diretório?"}
-  B -->|"Sim"| C["go run arquivo.go"]
-  B -->|"Não"| D["Criar diretório temporário"]
+  A["Go file opened"] --> B{"go.mod in directory?"}
+  B -->|"Yes"| C["go run file.go"]
+  B -->|"No"| D["Create temp directory"]
   D --> E["go mod init"]
   E --> F["go mod tidy"]
-  F --> G["go run arquivo.go"]
-  G --> H["Limpeza do temporário"]
+  F --> G["go run file.go"]
+  G --> H["Temporary cleanup"]
 ```
 
-## Comandos principais
+## Main commands
 
 - `RighToGo: Run Current Go Script`
+- `RighToGo: Run Current Go Script (With Args)`
+- `RighToGo: Run Current Go Script (New Window)`
 - `RighToGo: Ask LLM About This Script`
 
-## Build e documentação
+## Build and docs
 
-=== "Extensão"
+=== "Extension"
 
     ```bash
     pnpm install
@@ -39,17 +41,17 @@ flowchart LR
     pnpm test
     ```
 
-=== "Doc-site"
+=== "Docs site"
 
     ```bash
     make build-docs
     make serve-docs
     ```
 
-## Navegação rápida
+## Quick links
 
-- [Instalação](getting-started/installation.md)
-- [Execução de arquivos](features/execution.md)
-- [Configuração](guide/configuration.md)
-- [Arquitetura](advanced/architecture.md)
-- [Contribuição](about/contributing.md)
+- [Installation](getting-started/installation.md)
+- [File execution](features/execution.md)
+- [Configuration](guide/configuration.md)
+- [Architecture](advanced/architecture.md)
+- [Contributing](about/contributing.md)

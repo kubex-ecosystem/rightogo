@@ -1,26 +1,26 @@
 # Workflows
 
-## Fluxo 1: Snippet rápido sem projeto
+## Flow 1: Quick standalone snippet
 
-1. Criar arquivo `snippet.go`.
-2. Garantir `package main`.
-3. Executar com Play.
-4. Validar resultado no terminal.
-5. Descartar arquivo ou evoluir para projeto formal.
+1. Create `snippet.go`.
+2. Ensure `package main`.
+3. Run with Play.
+4. Validate output in terminal.
+5. Discard or migrate to formal project.
 
-## Fluxo 2: Reproduzir bug com dependência externa
+## Flow 2: Dependency bug reproduction
 
-1. Criar script mínimo que reproduz erro.
-2. Rodar em modo efêmero para resolver dependências automaticamente.
-3. Ajustar código e reexecutar rapidamente.
+1. Create minimal failing script.
+2. Run in ephemeral mode to resolve dependencies automatically.
+3. Iterate and rerun quickly.
 
-## Fluxo 3: Script interativo
+## Flow 3: Interactive script
 
-1. Criar programa com `fmt.Scanln`.
-2. Executar via RighToGo.
-3. Inserir dados no `RighToGo Terminal`.
+1. Build script with `fmt.Scanln`.
+2. Run via RighToGo.
+3. Provide input in `RighToGo Terminal`.
 
-## Fluxo 4: Ciclo de desenvolvimento da extensão
+## Flow 4: Extension development cycle
 
 ```bash
 pnpm install
@@ -29,26 +29,26 @@ pnpm test
 pnpm run lint
 ```
 
-Empacotamento:
+Packaging:
 
 ```bash
 pnpm run vscode:build
 ```
 
-Saída esperada:
+Expected outputs:
 
-- JS compilado em `dist/`
-- `.vsix` em `bin/`
+- compiled JS in `dist/`
+- `.vsix` in `bin/`
 
-## Fluxo 5: Execução com argumentos
+## Flow 5: Run with arguments
 
-1. Abra o arquivo `.go` elegível.
+1. Open an eligible `.go` file.
 2. Execute `RighToGo: Run Current Go Script (With Args)`.
-3. Informe argumentos no input rápido (ex: `--port 8080 --name "John Doe"`).
-4. Valide o comportamento no terminal.
+3. Enter args (e.g. `--port 8080 --name "John Doe"`).
+4. Validate behavior in terminal.
 
-## Fluxo 6: Execução destacada em nova janela
+## Flow 6: Run in new window
 
-1. Use `RighToGo: Run Current Go Script (New Window)`.
-2. A extensão tenta mover o terminal para uma nova janela do VSCode.
-3. Se a build não suportar o comando de mover janela, a execução continua no painel principal.
+1. Execute `RighToGo: Run Current Go Script (New Window)`.
+2. Extension attempts to move terminal to a new window.
+3. If unsupported, execution continues in panel.

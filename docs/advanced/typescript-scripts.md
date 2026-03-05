@@ -1,10 +1,10 @@
 # TypeScript Scripts
 
-A base atual expõe scripts para `tsc` e alternativa com TypeScript-Go (`tsgo`) quando disponível na máquina do desenvolvedor.
+This repository supports a standard `tsc` pipeline and an optional TypeScript-Go (`tsgo`) pipeline when available on the developer machine.
 
-## Scripts disponíveis
+## Available scripts
 
-=== "Pipeline padrão (tsc)"
+=== "Standard pipeline (tsc)"
 
     ```bash
     pnpm run check-types
@@ -12,7 +12,7 @@ A base atual expõe scripts para `tsc` e alternativa com TypeScript-Go (`tsgo`) 
     pnpm run watch
     ```
 
-=== "Pipeline alternativo (tsgo)"
+=== "Alternative pipeline (tsgo)"
 
     ```bash
     pnpm run check-types:tsgo
@@ -20,21 +20,21 @@ A base atual expõe scripts para `tsc` e alternativa com TypeScript-Go (`tsgo`) 
     pnpm run watch:tsgo
     ```
 
-## Build completo
+## Full build
 
-=== "Com tsc"
+=== "With tsc"
 
     ```bash
     pnpm run build
     ```
 
-=== "Com tsgo"
+=== "With tsgo"
 
     ```bash
     pnpm run build:tsgo
     ```
 
-## Artefatos
+## Artifacts
 
-- Código compilado: `dist/`
-- Pacote VSCode (`vsix`): `bin/`
+- Compiled extension output: `dist/`
+- VSCode package (`.vsix`): `bin/`

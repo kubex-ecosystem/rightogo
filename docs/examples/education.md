@@ -1,22 +1,22 @@
 # Educational Use
 
-## Cenário
+## Scenario
 
-Instrutores e estudantes frequentemente precisam validar snippets de Go sem overhead de projeto completo.
+Instructors and students often need to validate Go snippets quickly without the overhead of full project scaffolding.
 
-## Como RighToGo ajuda
+## How RighToGo helps
 
-- Reduz etapas de configuração inicial.
-- Permite foco no conceito ensinado (loops, structs, concorrência, etc.).
-- Mantém interação de terminal para exercícios com entrada de usuário.
+- Reduces setup steps.
+- Keeps focus on concepts (loops, structs, concurrency, etc.).
+- Preserves terminal interaction for input-driven exercises.
 
-## Exemplo de laboratório rápido
+## Quick lab flow
 
-1. Aluno cria `exercise.go` com `package main`.
-2. Usa Play para executar.
-3. Ajusta o código em ciclos curtos até atingir resultado esperado.
+1. Student creates `exercise.go` with `package main`.
+2. Runs with Play.
+3. Iterates quickly until expected output is reached.
 
-## Exemplo de script
+## Example script
 
 ```go
 package main
@@ -25,12 +25,12 @@ import "fmt"
 
 func main() {
     var n int
-    fmt.Print("Digite um número: ")
+    fmt.Print("Type a number: ")
     fmt.Scanln(&n)
-    fmt.Printf("Dobro: %d\n", n*2)
+    fmt.Printf("Double: %d\n", n*2)
 }
 ```
 
-## Resultado
+## Outcome
 
-Menos tempo gasto em setup, mais tempo investido em aprendizagem prática.
+Less time spent on setup, more time on practical learning.

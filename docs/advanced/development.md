@@ -1,6 +1,6 @@
 # Development
 
-## Setup local
+## Local setup
 
 ```bash
 pnpm install
@@ -8,32 +8,32 @@ pnpm run compile
 pnpm test
 ```
 
-## Execução em modo desenvolvimento
+## Run extension in development mode
 
-- Abrir workspace no VSCode.
-- Pressionar `F5`.
-- Validar comando `RighToGo: Run Current Go Script`.
+- Open the workspace in VSCode.
+- Press `F5`.
+- Validate `RighToGo: Run Current Go Script` and related commands.
 
-## Lint e tipagem
+## Linting and type checks
 
 ```bash
 pnpm run check-types
 pnpm run lint
 ```
 
-## Empacotamento
+## Packaging
 
 ```bash
 pnpm run package
 pnpm run vscode:build
 ```
 
-## Estrutura de saída
+## Output structure
 
-- Build TypeScript: `dist/`
-- Pacote de distribuição: `bin/*.vsix`
+- TypeScript build output: `dist/`
+- Distribution package: `bin/*.vsix`
 
-## Documentação do projeto
+## Documentation commands
 
 ```bash
 make build-docs
