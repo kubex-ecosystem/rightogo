@@ -86,7 +86,7 @@
       "properties": {
         "rightogo.goBinaryPath": {
           "type": "string",
-          "default": "${HOME:-}/.go/bin/go",
+          "default": "${userHome}/.go/bin/go",
           "description": "Absolute path to the Go binary used by RighToGo."
         },
         "rightogo.cleanupTemporaryDirectory": {

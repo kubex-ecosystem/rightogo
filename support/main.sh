@@ -333,7 +333,7 @@ __main() {
       # Validate uv
       if [[ -t 1 && ! ${NON_INTERACTIVE:-} && ! ${CI:-} && -e /dev/tty ]]; then
         if ! command -v uv >/dev/null 2>&1; then
-          apt-get update && apt-get install -y uv
+          curl -sSf https://install.astral.sh/uv | sh
           if ! command -v uv >/dev/null 2>&1; then
             log error "The 'uv' tool is required to build documentation. Please install it and try again."
             return 1
@@ -382,7 +382,7 @@ __main() {
       # Validate uv
       if [[ -t 1 && ! ${NON_INTERACTIVE:-} && ! ${CI:-} && -e /dev/tty ]]; then
         if ! command -v uv >/dev/null 2>&1; then
-          apt-get update && apt-get install -y uv
+          curl -sSf https://install.astral.sh/uv | sh
           if ! command -v uv >/dev/null 2>&1; then
             log error "The 'uv' tool is required to build documentation. Please install it and try again."
             return 1
@@ -417,10 +417,10 @@ __main() {
         return 1
       fi
 
-      log success "Documentation server successfully ran at http://localhost:8080/docs"
+      log success "Documentation server successfully ran at http://localhost:8080"
 
       if command -v xdg-open >/dev/null 2>&1; then
-        bash -c 'sleep 1 && xdg-open "http://localhost:8080/docs"' &
+        bash -c 'sleep 1 && xdg-open "http://localhost:8080"' &
       fi
 
       wait $_DOCS_SERVER
@@ -438,7 +438,7 @@ __main() {
       # Validate uv
       if [[ -t 1 && ! ${NON_INTERACTIVE:-} && ! ${CI:-} && -e /dev/tty ]]; then
         if ! command -v uv >/dev/null 2>&1; then
-          apt-get update && apt-get install -y uv
+          curl -sSf https://install.astral.sh/uv | sh
           if ! command -v uv >/dev/null 2>&1; then
             log error "The 'uv' tool is required to build documentation. Please install it and try again."
             return 1
