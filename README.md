@@ -1,14 +1,14 @@
 # ![RighToGo](https://raw.githubusercontent.com/kubex-ecosystem/rightogo/refs/heads/main/docs/assets/top_banner.png)
 
-[![License: MIT](<https://img.shields.io/badge/License-MIT-green.svg?style=flat-square>)](LICENSE)
+[![License: MIT](<https://img.shields.io/badge/License-MIT-green.png?style=flat-square>)](LICENSE)
 [![VSCode](https://img.shields.io/badge/VSCode-Marketplace-blue?style=flat-square&logo=visual-studio-code&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=rafa-mori.rightogo)
 [![OpenVSIX](https://img.shields.io/badge/OpenVSX-Marketplace-purple?style=flat-square&logo=visual-studio-code&logoColor=purple)](https://open-vsx.org/extension/rafa-mori/rightogo)
-[![TypeScript](https://img.shields.io/badge/TypeScript-100%25-cyan.svg)](https://www.typescriptlang.org/)
-[![Release](https://img.shields.io/badge/Version-1.0.0-orange.svg)](https://github.com/kubex-ecosystem/rightogo/releases/latest)
+[![TypeScript](https://img.shields.io/badge/TypeScript-100%25-cyan.png)](https://www.typescriptlang.org/)
+[![Release](https://img.shields.io/badge/Version-1.0.0-orange.png)](https://github.com/kubex-ecosystem/rightogo/releases/latest)
 
 ---
 
-[🇧🇷 Portuguese documentation](./docs/README.pt-BR.md)
+[🇧🇷 Portuguese documentation](https://raw.githubusercontent.com/kubex-ecosystem/rightogo/refs/heads/main/docs/README.pt-BR.md)
 
 RighToGo is a VSCode extension designed to remove friction when running ephemeral Go scripts. It enables fast testing cycles without requiring manual project setup for every snippet.
 
